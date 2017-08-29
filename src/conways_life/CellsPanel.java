@@ -1,17 +1,27 @@
 package conways_life;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 
-public class CellsPanel implements Runnable {
+import javax.swing.JComponent;
+
+public class CellsPanel extends JComponent implements Runnable {
+
+	private static final long serialVersionUID = -3365733816461653809L;
 
 	private Color backgroundColor = new Color(0, 0, 0);
 	private Color lineColor = new Color(100, 100, 100);
 	private Color livingCellColor = new Color(255, 255, 255);
+	
 	private static final int CELL_SIZE = 5;
-	private static final int GRID_SIZE = 150;
-	private boolean[][] allCells;
+	private static final int CELL_GRID_SIZE = 150;
 	private long oneGenerationLifeTime;
+	
+	private boolean[][] allCells;
+	
+	private Dimension playGridSize = new Dimension(CELL_GRID_SIZE * (CELL_SIZE + 1) + 1,
+			CELL_GRID_SIZE * (CELL_SIZE + 1) + 1);
 	
 	public long getOneGenerationLifeTime() {
 		return oneGenerationLifeTime;
@@ -27,13 +37,13 @@ public class CellsPanel implements Runnable {
 	}
 
 	public CellsPanel() {
-		allCells = new boolean[GRID_SIZE][GRID_SIZE];
+		allCells = new boolean[CELL_GRID_SIZE][CELL_GRID_SIZE];
 		setOneGenerationLifeTime(1000);
 	}
 
 	public void oneGenerationCycle() {
-		for (int i = 0; i < GRID_SIZE; i++) {
-			for (int j = 0; j < GRID_SIZE; j++) {
+		for (int i = 0; i < CELL_GRID_SIZE; i++) {
+			for (int j = 0; j < CELL_GRID_SIZE; j++) {
 				int liveNeighbours = countLivingNeighbours(i, j);
 				if (liveNeighbours == 3) {
 					allCells[i][j] = true;
@@ -71,7 +81,8 @@ public class CellsPanel implements Runnable {
 		return count;
 	}
 
-	public void drawCellsPanel(Graphics g) {
+	@Override
+	public void paintComponent(Graphics g) {
 		g.setColor(backgroundColor);
 		// tu sa spoja ciary a bunky
 	}
@@ -83,6 +94,15 @@ public class CellsPanel implements Runnable {
 
 	public void drawGridLines(Graphics g) {
 		g.setColor(lineColor);
-		// tu sa nakreslia ciary
+		for (int i = 0; i < playGridSize.getWidth(); i++) {
+			g.drawLine(i, 0, i, (int) playGridSize.getHeight());
+			i += CELL_SIZE;// neviem ci nepriratat este +1, alebo sa to prirata automaticky pri prechode
+							// for cyklu
+		}
+		for (int i = 0; i < playGridSize.getHeight(); i++) {
+			g.drawLine(0, i, (int) playGridSize.getWidth(), i);
+			i += CELL_SIZE;// detto
+		}
+		
 	}
 }
