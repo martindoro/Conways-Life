@@ -94,8 +94,8 @@ public class CellsPanel extends JComponent implements Runnable {
 		for (int i = 0; i < CELL_GRID_SIZE; i++) {
 			for (int j = 0; j < CELL_GRID_SIZE; j++) {
 				if (allCells[i][j])
-					g.drawRect(i * (CELL_SIZE + 1), j * (CELL_SIZE), CELL_SIZE, CELL_SIZE);// vykreslovanie zivych
-																							// buniek
+					g.drawRect((i * (CELL_SIZE + 1)) + 1, (j * (CELL_SIZE + 1) + 1), CELL_SIZE, CELL_SIZE);
+				// vykreslovanie zivych buniek
 			}
 		}
 	}
