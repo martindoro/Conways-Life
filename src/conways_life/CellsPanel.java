@@ -84,12 +84,20 @@ public class CellsPanel extends JComponent implements Runnable {
 	@Override
 	public void paintComponent(Graphics g) {
 		g.setColor(backgroundColor);
+		drawGridLines(g);
+		drawCells(g);
 		// tu sa spoja ciary a bunky
 	}
 
 	public void drawCells(Graphics g) {
 		g.setColor(livingCellColor);
-		// tu sa budu vykreslovat bunky
+		for (int i = 0; i < CELL_GRID_SIZE; i++) {
+			for (int j = 0; j < CELL_GRID_SIZE; j++) {
+				if (allCells[i][j])
+					g.drawRect(i * (CELL_SIZE + 1), j * (CELL_SIZE), CELL_SIZE, CELL_SIZE);// vykreslovanie zivych
+																							// buniek
+			}
+		}
 	}
 
 	public void drawGridLines(Graphics g) {
