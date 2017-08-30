@@ -3,6 +3,8 @@ package conways_life;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JComponent;
 
@@ -33,7 +35,18 @@ public class CellsPanel extends JComponent implements Runnable {
 
 	@Override
 	public void run() {
-		new CellsPanel();
+		new CellsPanel().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int x = e.getX();
+				int y = e.getY();
+				int cellX = (x + CELL_SIZE) / (CELL_SIZE + 1);
+				int cellY = (y + CELL_SIZE) / (CELL_SIZE + 1);
+				if (!allCells[cellX][cellY]) {
+					allCells[cellX][cellY] = true;
+				}
+			}
+		});
 	}
 
 	public CellsPanel() {
