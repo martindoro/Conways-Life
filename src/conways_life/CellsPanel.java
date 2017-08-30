@@ -18,7 +18,7 @@ public class CellsPanel extends JComponent implements Runnable {
 	
 	private static final int CELL_SIZE = 5;
 	private static final int CELL_GRID_SIZE = 150;
-	private long oneGenerationLifeTime;
+	public static long oneGenerationLifeTime;
 	
 	private boolean[][] allCells;
 	
@@ -29,8 +29,8 @@ public class CellsPanel extends JComponent implements Runnable {
 		return oneGenerationLifeTime;
 	}
 
-	public void setOneGenerationLifeTime(long oneGenerationLifeTime) {
-		this.oneGenerationLifeTime = oneGenerationLifeTime;
+	public static void setOneGenerationLifeTime(long oneGenerationLifeTime) {
+		CellsPanel.oneGenerationLifeTime = oneGenerationLifeTime;
 	}
 
 	@Override
@@ -44,6 +44,7 @@ public class CellsPanel extends JComponent implements Runnable {
 				int cellY = (y + CELL_SIZE) / (CELL_SIZE + 1);
 				if (!allCells[cellX][cellY]) {
 					allCells[cellX][cellY] = true;
+					repaint();
 				}
 			}
 		});
@@ -54,7 +55,8 @@ public class CellsPanel extends JComponent implements Runnable {
 		setOneGenerationLifeTime(1000);
 	}
 
-	public void oneGenerationCycle() {
+	public void oneGenerationCycle() throws InterruptedException {
+		wait(oneGenerationLifeTime);
 		for (int i = 0; i < CELL_GRID_SIZE; i++) {
 			for (int j = 0; j < CELL_GRID_SIZE; j++) {
 				int liveNeighbours = countLivingNeighbours(i, j);
