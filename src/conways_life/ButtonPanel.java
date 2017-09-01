@@ -8,15 +8,9 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class ButtonPanel extends JPanel implements Runnable{
+public class ButtonPanel extends JPanel{
 
-	private static final long serialVersionUID = -4325354783677529831L;
-
-	@Override
-	public void run() {
-		new ButtonPanel();
-
-	}
+	private static final long serialVersionUID = -7081739959526621292L;
 
 	public ButtonPanel() {
 		setLayout(new GridLayout(2, 0));
@@ -36,5 +30,8 @@ public class ButtonPanel extends JPanel implements Runnable{
 				CellsPanel.setOneGenerationLifeTime((long) Math.pow(lifeTime, 2));
 			}
 		});
+		setVisible(true);
+		repaint();
+
 	}
 }

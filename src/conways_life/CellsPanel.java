@@ -35,7 +35,7 @@ public class CellsPanel extends JComponent implements Runnable {
 
 	@Override
 	public void run() {
-		new CellsPanel().addMouseListener(new MouseAdapter() {
+		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int x = e.getX();
@@ -71,6 +71,7 @@ public class CellsPanel extends JComponent implements Runnable {
 				}
 			}
 		}
+		repaint();
 	}
 
 	private int countLivingNeighbours(int i, int j) {
@@ -98,6 +99,7 @@ public class CellsPanel extends JComponent implements Runnable {
 
 	@Override
 	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		g.setColor(backgroundColor);
 		drawGridLines(g);
 		drawCells(g);
