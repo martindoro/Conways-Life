@@ -6,9 +6,9 @@ import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JComponent;
+import javax.swing.JPanel;
 
-public class CellsPanel extends JComponent implements Runnable {
+public class CellsPanel extends JPanel implements Runnable {
 
 	private static final long serialVersionUID = -3365733816461653809L;
 
@@ -17,7 +17,7 @@ public class CellsPanel extends JComponent implements Runnable {
 	private Color livingCellColor = new Color(255, 255, 255);
 	
 	private static final int CELL_SIZE = 5;
-	private static final int CELL_GRID_SIZE = 150;
+	private static final int CELL_GRID_SIZE = 100;
 	public static long oneGenerationLifeTime;
 	
 	private boolean[][] allCells;
@@ -121,12 +121,12 @@ public class CellsPanel extends JComponent implements Runnable {
 		g.setColor(lineColor);
 		for (int i = 0; i < playGridSize.getWidth(); i++) {
 			g.drawLine(i, 0, i, (int) playGridSize.getHeight());
-			i += CELL_SIZE;// neviem ci nepriratat este +1, alebo sa to prirata automaticky pri prechode
+			i += CELL_SIZE + 1;// neviem ci nepriratat este +1, alebo sa to prirata automaticky pri prechode
 							// for cyklu
 		}
 		for (int i = 0; i < playGridSize.getHeight(); i++) {
 			g.drawLine(0, i, (int) playGridSize.getWidth(), i);
-			i += CELL_SIZE;// detto
+			i += CELL_SIZE + 1;// detto
 		}
 		
 	}

@@ -21,6 +21,7 @@ public class ButtonPanel extends JPanel{
 		lifeSpeed.setMajorTickSpacing(50);
 		lifeSpeed.setPaintTicks(true);
 		lifeSpeed.setPaintLabels(true);
+		add(lifeSpeed);
 		lifeSpeed.addChangeListener(new ChangeListener() {
 
 			@Override
