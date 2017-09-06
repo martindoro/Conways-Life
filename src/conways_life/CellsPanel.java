@@ -101,6 +101,7 @@ public class CellsPanel extends JPanel implements Runnable {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.setColor(backgroundColor);
+		g.setClip(0, 0, CELL_GRID_SIZE * (CELL_SIZE + 1) + 1, CELL_GRID_SIZE * (CELL_SIZE + 1) + 1);
 		drawGridLines(g);
 		drawCells(g);
 		// tu sa spoja ciary a bunky
@@ -119,14 +120,13 @@ public class CellsPanel extends JPanel implements Runnable {
 
 	public void drawGridLines(Graphics g) {
 		g.setColor(lineColor);
-		for (int i = 0; i < playGridSize.getWidth(); i++) {
-			g.drawLine(i, 0, i, (int) playGridSize.getHeight());
-			i += CELL_SIZE + 1;// neviem ci nepriratat este +1, alebo sa to prirata automaticky pri prechode
-							// for cyklu
+		for (int i = 0; i <= playGridSize.getWidth(); i++) {
+			g.drawLine(i, 0, i, (int) playGridSize.getHeight() - 1);
+			i += CELL_SIZE;
 		}
 		for (int i = 0; i < playGridSize.getHeight(); i++) {
-			g.drawLine(0, i, (int) playGridSize.getWidth(), i);
-			i += CELL_SIZE + 1;// detto
+			g.drawLine(0, i, (int) playGridSize.getWidth() - 1, i);
+			i += CELL_SIZE;
 		}
 		
 	}
