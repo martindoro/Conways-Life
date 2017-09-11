@@ -1,6 +1,7 @@
 package conways_life;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -11,12 +12,16 @@ public class Life {
 		EventQueue.invokeLater(() -> {
 			JFrame mainFrame = new JFrame("Conway`s Life");
 			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			mainFrame.setLayout(new BorderLayout(0, 20));
-			mainFrame.getContentPane().add(new CellsPanel(), BorderLayout.WEST);
-			mainFrame.getContentPane().add(new ButtonPanel(), BorderLayout.EAST);
-			// mainFrame.setPreferredSize(new Dimension(1000, 770));
-			mainFrame.pack();
+			mainFrame.setLayout(new BorderLayout());
+			mainFrame.setSize(new Dimension(607, 696));
+			mainFrame.setResizable(false);
+			mainFrame.add(new CellsPanel(), BorderLayout.LINE_START);
+			mainFrame.add(new ButtonPanel(), BorderLayout.SOUTH);
 			mainFrame.setVisible(true);
 		});
+
+		while (CellsPanel.oneGenerationLifeTime >= 0) {
+
+		}
 	}
 }

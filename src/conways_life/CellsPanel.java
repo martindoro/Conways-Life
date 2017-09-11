@@ -5,22 +5,23 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Random;
 
 import javax.swing.JPanel;
 
-public class CellsPanel extends JPanel implements Runnable {
+public class CellsPanel extends JPanel {
 
 	private static final long serialVersionUID = -3365733816461653809L;
 
 	private Color backgroundColor = new Color(0, 0, 0);
 	private Color lineColor = new Color(100, 100, 100);
-	private Color livingCellColor = new Color(255, 255, 255);
+	private Color livingCellColor = new Color(0, 0, 0);
 	
 	private static final int CELL_SIZE = 5;
 	private static final int CELL_GRID_SIZE = 100;
 	public static long oneGenerationLifeTime;
 	
-	private boolean[][] allCells;
+	private boolean[][] allCells = new boolean[CELL_GRID_SIZE][CELL_GRID_SIZE];
 	
 	private Dimension playGridSize = new Dimension(CELL_GRID_SIZE * (CELL_SIZE + 1) + 1,
 			CELL_GRID_SIZE * (CELL_SIZE + 1) + 1);
@@ -33,30 +34,35 @@ public class CellsPanel extends JPanel implements Runnable {
 		CellsPanel.oneGenerationLifeTime = oneGenerationLifeTime;
 	}
 
-	@Override
-	public void run() {
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				int x = e.getX();
-				int y = e.getY();
-				int cellX = (x + CELL_SIZE) / (CELL_SIZE + 1);
-				int cellY = (y + CELL_SIZE) / (CELL_SIZE + 1);
-				if (!allCells[cellX][cellY]) {
-					allCells[cellX][cellY] = true;
-					repaint();
-				}
-			}
-		});
-	}
-
 	public CellsPanel() {
-		allCells = new boolean[CELL_GRID_SIZE][CELL_GRID_SIZE];
-		setOneGenerationLifeTime(1000);
+		addMouseListener(new MouseHandler());
+		int size = CELL_GRID_SIZE;
+		int liveCell = size * size / 3;
+		Random randomGenerator = new Random();
+		for (int k = 0; k < liveCell; k++) {
+			int i = randomGenerator.nextInt(size);
+			int j = randomGenerator.nextInt(size);
+			allCells[i][j] = true;
+		}
+		repaint();
 	}
 
-	public void oneGenerationCycle() throws InterruptedException {
-		wait(oneGenerationLifeTime);
+	private class MouseHandler extends MouseAdapter {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			int x = e.getX();
+			int y = e.getY();
+			int cellX = (x + CELL_SIZE) / (CELL_SIZE + 1);
+			int cellY = (y + CELL_SIZE) / (CELL_SIZE + 1);
+			if (!allCells[cellX][cellY]) {
+				allCells[cellX][cellY] = true;
+			}
+			repaint();
+		}
+	}
+
+	public void oneGenerationCycle() {
+		// wait(oneGenerationLifeTime);
 		for (int i = 0; i < CELL_GRID_SIZE; i++) {
 			for (int j = 0; j < CELL_GRID_SIZE; j++) {
 				int liveNeighbours = countLivingNeighbours(i, j);
@@ -76,23 +82,51 @@ public class CellsPanel extends JPanel implements Runnable {
 
 	private int countLivingNeighbours(int i, int j) {
 		int count = 0;
-		// toto este treba domysliet, krajne bunky su problem
-		if (allCells[i - 1][j - 1])
-			count++;
-		if (allCells[i][j - 1])
-			count++;
-		if (allCells[i + 1][j - 1])
-			count++;
-		if (allCells[i + 1][j])
-			count++;
-		if (allCells[i + 1][j + 1])
-			count++;
-		if (allCells[i][j + 1])
-			count++;
-		if (allCells[i - 1][j + 1])
-			count++;
-		if (allCells[i - 1][j])
-			count++;
+
+		int iminus = i - 1;
+		int jminus = j - 1;
+		int iplus = i + 1;
+		int jplus = j + 1;
+
+		if (iminus >= 0) {
+			if (jminus >= 0) {
+				if (allCells[iminus][jminus])
+					count++;
+			}
+
+			if (allCells[iminus][j])
+				count++;
+
+			if (jplus < CELL_GRID_SIZE) {
+				if (allCells[iminus][jplus])
+					count++;
+			}
+		}
+
+		if (jminus >= 0) {
+			if (allCells[i][jminus])
+				count++;
+		}
+
+		if (jplus < CELL_GRID_SIZE) {
+			if (allCells[i][jplus])
+				count++;
+		}
+
+		if (iplus < CELL_GRID_SIZE) {
+			if (jminus >= 0) {
+				if (allCells[iplus][jminus])
+					count++;
+			}
+
+			if (allCells[iplus][j])
+				count++;
+
+			if (jplus < CELL_GRID_SIZE) {
+				if (allCells[iplus][jplus])
+					count++;
+			}
+		}
 
 		return count;
 	}
@@ -112,8 +146,7 @@ public class CellsPanel extends JPanel implements Runnable {
 		for (int i = 0; i < CELL_GRID_SIZE; i++) {
 			for (int j = 0; j < CELL_GRID_SIZE; j++) {
 				if (allCells[i][j])
-					g.drawRect((i * (CELL_SIZE + 1)) + 1, (j * (CELL_SIZE + 1) + 1), CELL_SIZE, CELL_SIZE);
-				// vykreslovanie zivych buniek
+					g.fillRect((i * (CELL_SIZE + 1)) + 1, (j * (CELL_SIZE + 1) + 1), CELL_SIZE, CELL_SIZE);
 			}
 		}
 	}
