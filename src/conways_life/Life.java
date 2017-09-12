@@ -8,20 +8,23 @@ import javax.swing.JFrame;
 
 public class Life {
 
-	public static void main(String[] args) {
+	static CellsPanel cellsPanel = new CellsPanel();
+
+	public static void main(String[] args) throws InterruptedException {
 		EventQueue.invokeLater(() -> {
 			JFrame mainFrame = new JFrame("Conway`s Life");
 			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			mainFrame.setLayout(new BorderLayout());
 			mainFrame.setSize(new Dimension(607, 696));
 			mainFrame.setResizable(false);
-			mainFrame.add(new CellsPanel(), BorderLayout.LINE_START);
+			mainFrame.add(cellsPanel, BorderLayout.CENTER);
 			mainFrame.add(new ButtonPanel(), BorderLayout.SOUTH);
 			mainFrame.setVisible(true);
 		});
 
-		while (CellsPanel.oneGenerationLifeTime >= 0) {
-
+		for (int i = 0; i <= 10000; i++) {
+			Thread.sleep(CellsPanel.oneGenerationLifeTime);
+			cellsPanel.oneGenerationCycle();
 		}
 	}
 }

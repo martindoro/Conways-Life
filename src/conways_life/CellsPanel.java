@@ -11,15 +11,14 @@ import javax.swing.JPanel;
 
 public class CellsPanel extends JPanel {
 
-	private static final long serialVersionUID = -3365733816461653809L;
-
+	private static final long serialVersionUID = -1381479706484952735L;
 	private Color backgroundColor = new Color(0, 0, 0);
 	private Color lineColor = new Color(100, 100, 100);
 	private Color livingCellColor = new Color(0, 0, 0);
 	
 	private static final int CELL_SIZE = 5;
 	private static final int CELL_GRID_SIZE = 100;
-	public static long oneGenerationLifeTime;
+	public static long oneGenerationLifeTime = 1000;
 	
 	private boolean[][] allCells = new boolean[CELL_GRID_SIZE][CELL_GRID_SIZE];
 	
@@ -37,7 +36,7 @@ public class CellsPanel extends JPanel {
 	public CellsPanel() {
 		addMouseListener(new MouseHandler());
 		int size = CELL_GRID_SIZE;
-		int liveCell = size * size / 3;
+		int liveCell = size * size / 10;
 		Random randomGenerator = new Random();
 		for (int k = 0; k < liveCell; k++) {
 			int i = randomGenerator.nextInt(size);
@@ -52,8 +51,8 @@ public class CellsPanel extends JPanel {
 		public void mouseClicked(MouseEvent e) {
 			int x = e.getX();
 			int y = e.getY();
-			int cellX = (x + CELL_SIZE) / (CELL_SIZE + 1);
-			int cellY = (y + CELL_SIZE) / (CELL_SIZE + 1);
+			int cellX = ((x + CELL_SIZE) / (CELL_SIZE + 1)) - 1;
+			int cellY = ((y + CELL_SIZE) / (CELL_SIZE + 1)) - 1;
 			if (!allCells[cellX][cellY]) {
 				allCells[cellX][cellY] = true;
 			}
@@ -69,10 +68,10 @@ public class CellsPanel extends JPanel {
 				if (liveNeighbours == 3) {
 					allCells[i][j] = true;
 				}
-				if (liveNeighbours > 3) {
+				if (allCells[i][j] && liveNeighbours > 3) {
 					allCells[i][j] = false;
 				}
-				if (liveNeighbours < 2) {
+				if (allCells[i][j] && liveNeighbours < 2) {
 					allCells[i][j] = false;
 				}
 			}
@@ -138,7 +137,6 @@ public class CellsPanel extends JPanel {
 		g.setClip(0, 0, CELL_GRID_SIZE * (CELL_SIZE + 1) + 1, CELL_GRID_SIZE * (CELL_SIZE + 1) + 1);
 		drawGridLines(g);
 		drawCells(g);
-		// tu sa spoja ciary a bunky
 	}
 
 	public void drawCells(Graphics g) {
