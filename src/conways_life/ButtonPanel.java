@@ -3,8 +3,10 @@ package conways_life;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Hashtable;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
@@ -15,10 +17,16 @@ public class ButtonPanel extends JPanel{
 
 	private static final long serialVersionUID = -7081739959526621292L;
 
-	public ButtonPanel() {
-		setLayout(new GridLayout(0, 3));
+	Hashtable<Integer, JLabel> table = new Hashtable<Integer, JLabel>();
 
-		JSlider lifeSpeed = new JSlider(0, 100, (int) Math.sqrt(CellsPanel.oneGenerationLifeTime));
+	public ButtonPanel() {
+		setLayout(new GridLayout(0, 4));
+
+		table.put(0, new JLabel("min"));
+		table.put(50, new JLabel("max"));
+		JSlider lifeSpeed = new JSlider(0, 50, (int) Math.sqrt(CellsPanel.oneGenerationLifeTime));
+		lifeSpeed.setInverted(true);
+		lifeSpeed.setLabelTable(table);
 		lifeSpeed.setBorder(new TitledBorder("One Generation Lifetime"));
 		lifeSpeed.setMinorTickSpacing(10);
 		lifeSpeed.setMajorTickSpacing(50);
@@ -40,7 +48,17 @@ public class ButtonPanel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CellsPanel.setOneGenerationLifeTime(lifeSpeed.getValue());
+				CellsPanel.setOneGenerationLifeTime((long) Math.pow(lifeSpeed.getValue(), 2));
+			}
+		});
+
+		JButton generateNewRandomBoard = new JButton();
+		generateNewRandomBoard.setText("Generate NEW Random Board");
+		generateNewRandomBoard.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Life.mainFrame.add(Life.cellsPanel);
 			}
 		});
 
@@ -50,11 +68,12 @@ public class ButtonPanel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CellsPanel.setOneGenerationLifeTime(0);
+
 			}
 		});
 		add(lifeSpeed);
 		add(start);
+		add(generateNewRandomBoard);
 		add(stop);
 		setVisible(true);
 		repaint();

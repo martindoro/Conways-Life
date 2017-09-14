@@ -9,10 +9,11 @@ import javax.swing.JFrame;
 public class Life {
 
 	static CellsPanel cellsPanel = new CellsPanel();
+	static JFrame mainFrame;
 
 	public static void main(String[] args) throws InterruptedException {
 		EventQueue.invokeLater(() -> {
-			JFrame mainFrame = new JFrame("Conway`s Life");
+			mainFrame = new JFrame("Conway`s Life");
 			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			mainFrame.setLayout(new BorderLayout());
 			mainFrame.setSize(new Dimension(607, 696));
@@ -23,8 +24,8 @@ public class Life {
 		});
 
 		for (int i = 0; i <= 10000; i++) {
-			Thread.sleep(CellsPanel.oneGenerationLifeTime);
 			cellsPanel.oneGenerationCycle();
+			Thread.sleep(CellsPanel.oneGenerationLifeTime);
 		}
 	}
 }

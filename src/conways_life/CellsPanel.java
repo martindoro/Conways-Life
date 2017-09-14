@@ -12,9 +12,9 @@ import javax.swing.JPanel;
 public class CellsPanel extends JPanel {
 
 	private static final long serialVersionUID = -1381479706484952735L;
-	private Color backgroundColor = new Color(0, 0, 0);
-	private Color lineColor = new Color(100, 100, 100);
-	private Color livingCellColor = new Color(0, 0, 0);
+	private Color backgroundColor = new Color(255, 239, 213);
+	private Color lineColor = new Color(255, 228, 196);
+	private Color livingCellColor = new Color(238, 203, 173);
 	
 	private static final int CELL_SIZE = 5;
 	private static final int CELL_GRID_SIZE = 100;
@@ -61,21 +61,22 @@ public class CellsPanel extends JPanel {
 	}
 
 	public void oneGenerationCycle() {
-		// wait(oneGenerationLifeTime);
+		boolean[][] tempGrid = allCells.clone();
 		for (int i = 0; i < CELL_GRID_SIZE; i++) {
 			for (int j = 0; j < CELL_GRID_SIZE; j++) {
 				int liveNeighbours = countLivingNeighbours(i, j);
 				if (liveNeighbours == 3) {
-					allCells[i][j] = true;
+					tempGrid[i][j] = true;
 				}
 				if (allCells[i][j] && liveNeighbours > 3) {
-					allCells[i][j] = false;
+					tempGrid[i][j] = false;
 				}
 				if (allCells[i][j] && liveNeighbours < 2) {
-					allCells[i][j] = false;
+					tempGrid[i][j] = false;
 				}
 			}
 		}
+		allCells = tempGrid.clone();
 		repaint();
 	}
 
@@ -133,8 +134,7 @@ public class CellsPanel extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.setColor(backgroundColor);
-		g.setClip(0, 0, CELL_GRID_SIZE * (CELL_SIZE + 1) + 1, CELL_GRID_SIZE * (CELL_SIZE + 1) + 1);
+		setBackground(backgroundColor);
 		drawGridLines(g);
 		drawCells(g);
 	}
