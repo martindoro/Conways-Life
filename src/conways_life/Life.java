@@ -10,6 +10,7 @@ public class Life {
 
 	static CellsPanel cellsPanel = new CellsPanel();
 	static JFrame mainFrame;
+	static boolean isRunning = true;
 
 	public static void main(String[] args) throws InterruptedException {
 		EventQueue.invokeLater(() -> {
@@ -23,9 +24,11 @@ public class Life {
 			mainFrame.setVisible(true);
 		});
 
-		for (int i = 0; i <= 10000; i++) {
-			cellsPanel.oneGenerationCycle();
-			Thread.sleep(CellsPanel.oneGenerationLifeTime);
+		for (;;) {
+			while (isRunning) {
+				cellsPanel.oneGenerationCycle();
+				Thread.sleep(CellsPanel.oneGenerationLifeTime);
+			}
 		}
 	}
 }

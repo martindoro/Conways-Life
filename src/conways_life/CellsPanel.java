@@ -36,7 +36,7 @@ public class CellsPanel extends JPanel {
 	public CellsPanel() {
 		addMouseListener(new MouseHandler());
 		int size = CELL_GRID_SIZE;
-		int liveCell = size * size / 10;
+		int liveCell = size * size / 5;
 		Random randomGenerator = new Random();
 		for (int k = 0; k < liveCell; k++) {
 			int i = randomGenerator.nextInt(size);
@@ -61,11 +61,16 @@ public class CellsPanel extends JPanel {
 	}
 
 	public void oneGenerationCycle() {
-		boolean[][] tempGrid = allCells.clone();
+		boolean[][] tempGrid = new boolean[CELL_GRID_SIZE][CELL_GRID_SIZE];
 		for (int i = 0; i < CELL_GRID_SIZE; i++) {
 			for (int j = 0; j < CELL_GRID_SIZE; j++) {
 				int liveNeighbours = countLivingNeighbours(i, j);
+				tempGrid[i][j] = false;
+				
 				if (liveNeighbours == 3) {
+					tempGrid[i][j] = true;
+				}
+				if (allCells[i][j] && liveNeighbours == 2) {
 					tempGrid[i][j] = true;
 				}
 				if (allCells[i][j] && liveNeighbours > 3) {
@@ -76,7 +81,7 @@ public class CellsPanel extends JPanel {
 				}
 			}
 		}
-		allCells = tempGrid.clone();
+		allCells = tempGrid;
 		repaint();
 	}
 

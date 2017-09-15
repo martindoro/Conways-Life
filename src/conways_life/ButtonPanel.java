@@ -48,7 +48,7 @@ public class ButtonPanel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				CellsPanel.setOneGenerationLifeTime((long) Math.pow(lifeSpeed.getValue(), 2));
+				Life.isRunning = true;
 			}
 		});
 
@@ -68,7 +68,7 @@ public class ButtonPanel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				Life.isRunning = false;
 			}
 		});
 		add(lifeSpeed);
