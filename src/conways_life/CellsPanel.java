@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.JPanel;
@@ -20,7 +21,7 @@ public class CellsPanel extends JPanel {
 	private static final int CELL_GRID_SIZE = 100;
 	public static long oneGenerationLifeTime = 1000;
 	
-	private boolean[][] allCells = new boolean[CELL_GRID_SIZE][CELL_GRID_SIZE];
+	private ArrayList<ArrayList<Boolean>> allCells = new ArrayList<ArrayList<Boolean>>(CELL_GRID_SIZE);
 	
 	private Dimension playGridSize = new Dimension(CELL_GRID_SIZE * (CELL_SIZE + 1) + 1,
 			CELL_GRID_SIZE * (CELL_SIZE + 1) + 1);
@@ -35,13 +36,20 @@ public class CellsPanel extends JPanel {
 
 	public CellsPanel() {
 		addMouseListener(new MouseHandler());
-		int size = CELL_GRID_SIZE;
-		int liveCell = size * size / 5;
+		int liveCell = CELL_GRID_SIZE * CELL_GRID_SIZE / 3;
 		Random randomGenerator = new Random();
+		for (int i = 0; i < CELL_GRID_SIZE; i++) {
+			allCells.add(new ArrayList<Boolean>());
+		}
+		for (int i = 0; i < CELL_GRID_SIZE; i++) {
+			for (int j = 0; j < CELL_GRID_SIZE; j++) {
+				allCells.get(i).add(false);
+			}
+		}
 		for (int k = 0; k < liveCell; k++) {
-			int i = randomGenerator.nextInt(size);
-			int j = randomGenerator.nextInt(size);
-			allCells[i][j] = true;
+			int i = randomGenerator.nextInt(CELL_GRID_SIZE);
+			int j = randomGenerator.nextInt(CELL_GRID_SIZE);
+			allCells.get(i).set(j, true);
 		}
 		repaint();
 	}
@@ -53,35 +61,32 @@ public class CellsPanel extends JPanel {
 			int y = e.getY();
 			int cellX = ((x + CELL_SIZE) / (CELL_SIZE + 1)) - 1;
 			int cellY = ((y + CELL_SIZE) / (CELL_SIZE + 1)) - 1;
-			if (!allCells[cellX][cellY]) {
-				allCells[cellX][cellY] = true;
+			if (!allCells.get(cellX).get(cellY)) {
+				allCells.get(cellX).set(cellY, true);
 			}
 			repaint();
 		}
 	}
 
 	public void oneGenerationCycle() {
-		boolean[][] tempGrid = new boolean[CELL_GRID_SIZE][CELL_GRID_SIZE];
+		ArrayList<ArrayList<Boolean>> tempCells = new ArrayList<ArrayList<Boolean>>(allCells);
+		tempCells = allCells.clone();
 		for (int i = 0; i < CELL_GRID_SIZE; i++) {
 			for (int j = 0; j < CELL_GRID_SIZE; j++) {
 				int liveNeighbours = countLivingNeighbours(i, j);
-				tempGrid[i][j] = false;
 				
 				if (liveNeighbours == 3) {
-					tempGrid[i][j] = true;
+					tempCells.get(i).set(j, true);
 				}
-				if (allCells[i][j] && liveNeighbours == 2) {
-					tempGrid[i][j] = true;
+				if (allCells.get(i).get(j) && liveNeighbours > 3) {
+					tempCells.get(i).set(j, false);
 				}
-				if (allCells[i][j] && liveNeighbours > 3) {
-					tempGrid[i][j] = false;
-				}
-				if (allCells[i][j] && liveNeighbours < 2) {
-					tempGrid[i][j] = false;
+				if (allCells.get(i).get(j) && liveNeighbours < 2) {
+					tempCells.get(i).set(j, false);
 				}
 			}
 		}
-		allCells = tempGrid;
+		allCells = tempCells;
 		repaint();
 	}
 
@@ -95,40 +100,40 @@ public class CellsPanel extends JPanel {
 
 		if (iminus >= 0) {
 			if (jminus >= 0) {
-				if (allCells[iminus][jminus])
+				if (allCells.get(iminus).get(jminus))
 					count++;
 			}
 
-			if (allCells[iminus][j])
+			if (allCells.get(iminus).get(j))
 				count++;
 
 			if (jplus < CELL_GRID_SIZE) {
-				if (allCells[iminus][jplus])
+				if (allCells.get(iminus).get(jplus))
 					count++;
 			}
 		}
 
 		if (jminus >= 0) {
-			if (allCells[i][jminus])
+			if (allCells.get(i).get(jminus))
 				count++;
 		}
 
 		if (jplus < CELL_GRID_SIZE) {
-			if (allCells[i][jplus])
+			if (allCells.get(i).get(jplus))
 				count++;
 		}
 
 		if (iplus < CELL_GRID_SIZE) {
 			if (jminus >= 0) {
-				if (allCells[iplus][jminus])
+				if (allCells.get(iplus).get(jminus))
 					count++;
 			}
 
-			if (allCells[iplus][j])
+			if (allCells.get(iplus).get(j))
 				count++;
 
 			if (jplus < CELL_GRID_SIZE) {
-				if (allCells[iplus][jplus])
+				if (allCells.get(iplus).get(jplus))
 					count++;
 			}
 		}
@@ -148,7 +153,7 @@ public class CellsPanel extends JPanel {
 		g.setColor(livingCellColor);
 		for (int i = 0; i < CELL_GRID_SIZE; i++) {
 			for (int j = 0; j < CELL_GRID_SIZE; j++) {
-				if (allCells[i][j])
+				if (allCells.get(i).get(j))
 					g.fillRect((i * (CELL_SIZE + 1)) + 1, (j * (CELL_SIZE + 1) + 1), CELL_SIZE, CELL_SIZE);
 			}
 		}
@@ -164,6 +169,5 @@ public class CellsPanel extends JPanel {
 			g.drawLine(0, i, (int) playGridSize.getWidth() - 1, i);
 			i += CELL_SIZE;
 		}
-		
 	}
 }

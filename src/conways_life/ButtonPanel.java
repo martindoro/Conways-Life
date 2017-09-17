@@ -48,12 +48,12 @@ public class ButtonPanel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Life.isRunning = true;
+				// Life.t.start();
 			}
 		});
 
 		JButton generateNewRandomBoard = new JButton();
-		generateNewRandomBoard.setText("Generate NEW Random Board");
+		generateNewRandomBoard.setText("NEW Random Board");
 		generateNewRandomBoard.addActionListener(new ActionListener() {
 
 			@Override
@@ -68,7 +68,6 @@ public class ButtonPanel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Life.isRunning = false;
 			}
 		});
 		add(lifeSpeed);
