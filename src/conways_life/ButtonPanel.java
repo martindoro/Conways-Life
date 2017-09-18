@@ -48,7 +48,14 @@ public class ButtonPanel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Life.t.start();
+				while (Life.isRunning) {
+					Life.cellsPanel.oneGenerationCycle();
+					try {
+						Thread.sleep(CellsPanel.oneGenerationLifeTime);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+				}
 			}
 		});
 
@@ -59,7 +66,7 @@ public class ButtonPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Life.mainFrame.remove(Life.cellsPanel);
-				Life.mainFrame.add(new CellsPanel());
+				Life.mainFrame.add(Life.cellsPanel);
 				Life.mainFrame.validate();
 			}
 		});
@@ -70,6 +77,7 @@ public class ButtonPanel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				Life.isRunning = false;
 			}
 		});
 		add(lifeSpeed);

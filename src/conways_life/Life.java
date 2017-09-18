@@ -23,9 +23,5 @@ public class Life {
 			mainFrame.add(new ButtonPanel(), BorderLayout.SOUTH);
 			mainFrame.setVisible(true);
 		});
-		while (isRunning) {
-			cellsPanel.oneGenerationCycle();
-			Thread.sleep(CellsPanel.oneGenerationLifeTime);
-		}
 	}
 }
