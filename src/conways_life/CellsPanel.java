@@ -21,7 +21,7 @@ public class CellsPanel extends JPanel {
 	private static final int CELL_GRID_SIZE = 100;
 	public static long oneGenerationLifeTime = 1000;
 	
-	private ArrayList<ArrayList<Boolean>> allCells = new ArrayList<ArrayList<Boolean>>(CELL_GRID_SIZE);
+	private ArrayList<ArrayList<Boolean>> allCells;
 	
 	private Dimension playGridSize = new Dimension(CELL_GRID_SIZE * (CELL_SIZE + 1) + 1,
 			CELL_GRID_SIZE * (CELL_SIZE + 1) + 1);
@@ -37,6 +37,7 @@ public class CellsPanel extends JPanel {
 	public CellsPanel() {
 		addMouseListener(new MouseHandler());
 		int liveCell = CELL_GRID_SIZE * CELL_GRID_SIZE / 3;
+		allCells = new ArrayList<ArrayList<Boolean>>(CELL_GRID_SIZE);
 		Random randomGenerator = new Random();
 		for (int i = 0; i < CELL_GRID_SIZE; i++) {
 			allCells.add(new ArrayList<Boolean>());

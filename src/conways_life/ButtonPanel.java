@@ -58,7 +58,9 @@ public class ButtonPanel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Life.mainFrame.add(Life.cellsPanel);
+				Life.mainFrame.remove(Life.cellsPanel);
+				Life.mainFrame.add(new CellsPanel());
+				Life.mainFrame.validate();
 			}
 		});
 
