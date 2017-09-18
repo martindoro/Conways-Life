@@ -69,8 +69,10 @@ public class CellsPanel extends JPanel {
 	}
 
 	public void oneGenerationCycle() {
-		ArrayList<ArrayList<Boolean>> tempCells = new ArrayList<ArrayList<Boolean>>(allCells);
-		tempCells = allCells.clone();
+		ArrayList<ArrayList<Boolean>> tempCells = new ArrayList<ArrayList<Boolean>>(CELL_GRID_SIZE);
+		for (int i = 0; i < CELL_GRID_SIZE; i++) {
+			tempCells.add(i, new ArrayList<Boolean>(allCells.get(i)));
+		}
 		for (int i = 0; i < CELL_GRID_SIZE; i++) {
 			for (int j = 0; j < CELL_GRID_SIZE; j++) {
 				int liveNeighbours = countLivingNeighbours(i, j);
