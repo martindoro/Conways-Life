@@ -3,11 +3,15 @@ package conways_life;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class CellsPanel extends JPanel {
@@ -16,6 +20,7 @@ public class CellsPanel extends JPanel {
 	private Color backgroundColor = new Color(255, 249, 223);
 	private Color lineColor = new Color(255, 228, 196);
 	private Color livingCellColor = new Color(238, 203, 173);
+	private Image bgImage = null;
 	
 	private static final int CELL_SIZE = 5;
 	private static final int CELL_GRID_SIZE = 100;
@@ -151,6 +156,11 @@ public class CellsPanel extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		try {
+			bgImage = ImageIO.read(new File("src/images/life.png"));
+		} catch (IOException e) {
+		}
+		g.drawImage(bgImage, 0, 0, null);
 		setBackground(backgroundColor);
 		drawGridLines(g);
 		drawCells(g);
