@@ -2,6 +2,7 @@ package conways_life;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -21,6 +22,7 @@ public class CellsPanel extends JPanel {
 	private Color lineColor = new Color(255, 228, 196);
 	private Color livingCellColor = new Color(238, 203, 173);
 	private Image bgImage = null;
+	private static int generation;
 	
 	private static final int CELL_SIZE = 5;
 	private static final int CELL_GRID_SIZE = 100;
@@ -31,6 +33,7 @@ public class CellsPanel extends JPanel {
 			CELL_GRID_SIZE * (CELL_SIZE + 1) + 1);
 	
 	public CellsPanel() {
+		generation = 0;
 		addMouseListener(new MouseHandler());
 		allCells = new ArrayList<ArrayList<Boolean>>(CELL_GRID_SIZE);
 		for (int i = 0; i < CELL_GRID_SIZE; i++) {
@@ -45,6 +48,7 @@ public class CellsPanel extends JPanel {
 	}
 
 	public void clearCells() {
+		generation = 0;
 		for (int i = 0; i < CELL_GRID_SIZE; i++) {
 			for (int j = 0; j < CELL_GRID_SIZE; j++) {
 				allCells.get(i).set(j, false);
@@ -54,6 +58,7 @@ public class CellsPanel extends JPanel {
 	}
 
 	public void randomCellGenerator() {
+		generation = 0;
 		int liveCell = CELL_GRID_SIZE * CELL_GRID_SIZE * RandomSliderPanel.randomLiveCell / 100;
 		Random randomGenerator = new Random();
 		for (int k = 0; k < liveCell; k++) {
@@ -99,6 +104,7 @@ public class CellsPanel extends JPanel {
 			}
 		}
 		allCells = tempCells;
+		generation++;
 		repaint();
 	}
 
@@ -164,6 +170,9 @@ public class CellsPanel extends JPanel {
 		setBackground(backgroundColor);
 		drawGridLines(g);
 		drawCells(g);
+		g.setColor(new Color(0, 0, 0));
+		g.setFont(new Font("default", Font.BOLD, 16));
+		g.drawString("Generation " + generation, 20, 20);
 	}
 
 	public void drawCells(Graphics g) {
