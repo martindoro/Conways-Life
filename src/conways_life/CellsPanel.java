@@ -13,32 +13,21 @@ import javax.swing.JPanel;
 public class CellsPanel extends JPanel {
 
 	private static final long serialVersionUID = -1381479706484952735L;
-	private Color backgroundColor = new Color(255, 239, 213);
+	private Color backgroundColor = new Color(255, 249, 223);
 	private Color lineColor = new Color(255, 228, 196);
 	private Color livingCellColor = new Color(238, 203, 173);
 	
 	private static final int CELL_SIZE = 5;
 	private static final int CELL_GRID_SIZE = 100;
-	public static long oneGenerationLifeTime = 1000;
 	
 	private ArrayList<ArrayList<Boolean>> allCells;
 	
 	private Dimension playGridSize = new Dimension(CELL_GRID_SIZE * (CELL_SIZE + 1) + 1,
 			CELL_GRID_SIZE * (CELL_SIZE + 1) + 1);
 	
-	public long getOneGenerationLifeTime() {
-		return oneGenerationLifeTime;
-	}
-
-	public static void setOneGenerationLifeTime(long oneGenerationLifeTime) {
-		CellsPanel.oneGenerationLifeTime = oneGenerationLifeTime;
-	}
-
 	public CellsPanel() {
 		addMouseListener(new MouseHandler());
-		int liveCell = CELL_GRID_SIZE * CELL_GRID_SIZE / 3;
 		allCells = new ArrayList<ArrayList<Boolean>>(CELL_GRID_SIZE);
-		Random randomGenerator = new Random();
 		for (int i = 0; i < CELL_GRID_SIZE; i++) {
 			allCells.add(new ArrayList<Boolean>());
 		}
@@ -47,6 +36,21 @@ public class CellsPanel extends JPanel {
 				allCells.get(i).add(false);
 			}
 		}
+		repaint();
+	}
+
+	public void clearCells() {
+		for (int i = 0; i < CELL_GRID_SIZE; i++) {
+			for (int j = 0; j < CELL_GRID_SIZE; j++) {
+				allCells.get(i).set(j, false);
+			}
+		}
+		repaint();
+	}
+
+	public void randomCellGenerator() {
+		int liveCell = CELL_GRID_SIZE * CELL_GRID_SIZE * RandomSliderPanel.randomLiveCell / 100;
+		Random randomGenerator = new Random();
 		for (int k = 0; k < liveCell; k++) {
 			int i = randomGenerator.nextInt(CELL_GRID_SIZE);
 			int j = randomGenerator.nextInt(CELL_GRID_SIZE);

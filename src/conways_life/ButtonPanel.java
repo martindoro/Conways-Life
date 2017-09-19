@@ -15,18 +15,28 @@ import javax.swing.event.ChangeListener;
 
 public class ButtonPanel extends JPanel{
 
-	private static final long serialVersionUID = -7081739959526621292L;
+	private static final long serialVersionUID = -4961176929105495364L;
+	static boolean isRunning = true;
+	public long oneGenerationLifeTime = 1000;
 
-	Hashtable<Integer, JLabel> table = new Hashtable<Integer, JLabel>();
+	Hashtable<Integer, JLabel> speedTable = new Hashtable<Integer, JLabel>();
+
+	public long getOneGenerationLifeTime() {
+		return oneGenerationLifeTime;
+	}
+
+	public void setOneGenerationLifeTime(long oneGenerationLifeTime) {
+		this.oneGenerationLifeTime = oneGenerationLifeTime;
+	}
 
 	public ButtonPanel() {
 		setLayout(new GridLayout(0, 4));
 
-		table.put(0, new JLabel("min"));
-		table.put(50, new JLabel("max"));
-		JSlider lifeSpeed = new JSlider(0, 50, (int) Math.sqrt(CellsPanel.oneGenerationLifeTime));
+		speedTable.put(0, new JLabel("min"));
+		speedTable.put(50, new JLabel("max"));
+		JSlider lifeSpeed = new JSlider(0, 50, (int) Math.sqrt(oneGenerationLifeTime));
 		lifeSpeed.setInverted(true);
-		lifeSpeed.setLabelTable(table);
+		lifeSpeed.setLabelTable(speedTable);
 		lifeSpeed.setBorder(new TitledBorder("One Generation Lifetime"));
 		lifeSpeed.setMinorTickSpacing(10);
 		lifeSpeed.setMajorTickSpacing(50);
@@ -38,25 +48,28 @@ public class ButtonPanel extends JPanel{
 			public void stateChanged(ChangeEvent e) {
 				JSlider source = (JSlider) e.getSource();
 				int lifeTime = source.getValue();
-				CellsPanel.setOneGenerationLifeTime((long) Math.pow(lifeTime, 2));
+				setOneGenerationLifeTime((long) Math.pow(lifeTime, 2));
 			}
 		});
 
 		JButton start = new JButton();
 		start.setText("Start Life");
-		start.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				while (Life.isRunning) {
-					Life.cellsPanel.oneGenerationCycle();
-					try {
-						Thread.sleep(CellsPanel.oneGenerationLifeTime);
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
+		start.addActionListener(e -> {
+			start.setEnabled(false);
+			isRunning= true;
+			new Thread("Life") {
+				@Override
+				public void run() {
+					while (isRunning) {
+						Life.cellsPanel.oneGenerationCycle();
+						try {
+							Thread.sleep(oneGenerationLifeTime);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
 				}
-			}
+			}.start();
 		});
 
 		JButton generateNewRandomBoard = new JButton();
@@ -65,8 +78,8 @@ public class ButtonPanel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Life.mainFrame.remove(Life.cellsPanel);
-				Life.mainFrame.add(Life.cellsPanel);
+				Life.cellsPanel.clearCells();
+				Life.cellsPanel.randomCellGenerator();
 				Life.mainFrame.validate();
 			}
 		});
@@ -77,13 +90,14 @@ public class ButtonPanel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Life.isRunning = false;
+				isRunning = false;
+				start.setEnabled(true);
 			}
 		});
-		add(lifeSpeed);
-		add(start);
 		add(generateNewRandomBoard);
 		add(stop);
+		add(lifeSpeed);
+		add(start);
 		setVisible(true);
 		repaint();
 
