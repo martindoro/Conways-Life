@@ -7,14 +7,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 public class RandomSliderPanel extends JPanel {
-
 	private static final long serialVersionUID = -3987198420644975680L;
-	Hashtable<Integer, JLabel> randomTable = new Hashtable<Integer, JLabel>();
-	public static int randomLiveCell = 33;
+
+	private Hashtable<Integer, JLabel> randomTable = new Hashtable<Integer, JLabel>();
+	private static int randomLiveCell = 33;
 
 	public static int getRandomLiveCell() {
 		return randomLiveCell;
@@ -38,15 +36,12 @@ public class RandomSliderPanel extends JPanel {
 		randomLife.setMajorTickSpacing(25);
 		randomLife.setPaintTicks(true);
 		randomLife.setPaintLabels(true);
-		randomLife.addChangeListener(new ChangeListener() {
-
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				JSlider source = (JSlider) e.getSource();
-				int randomPercentage = source.getValue();
-				setRandomLiveCell(randomPercentage);
-			}
+		randomLife.addChangeListener(c -> {
+			JSlider source = (JSlider) c.getSource();
+			int randomPercentage = source.getValue();
+			setRandomLiveCell(randomPercentage);
 		});
+
 		add(randomLife);
 		setVisible(true);
 		repaint();
